@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io/ioutil"
 	"log"
 	"time"
 
@@ -22,6 +23,7 @@ func serveError(ctx *fasthttp.RequestCtx) {
 }
 
 func main() {
+	log.SetOutput(ioutil.Discard)
 	s1 := &fasthttp.Server{
 		Handler: sleepFor("no sleep", 0),
 	}

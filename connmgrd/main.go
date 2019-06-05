@@ -9,6 +9,7 @@ import (
 )
 
 type state struct {
+	cl       *fasthttp.Client
 	httpPool *connmgr.Pool
 }
 
@@ -21,7 +22,7 @@ func (s *state) proxy(ctx *fasthttp.RequestCtx) {
 	addr := h.Addr()
 
 	ctx.Request.SetRequestURI(addr)
-	err := fasthttp.Do(&ctx.Request, &ctx.Response)
+	err := s.cl.Do(&ctx.Request, &ctx.Response)
 	if err != nil {
 		log.Printf("error while processing request: %s", err)
 	}
@@ -30,6 +31,10 @@ func (s *state) proxy(ctx *fasthttp.RequestCtx) {
 func main() {
 	s := &state{
 		httpPool: connmgr.NewPool(),
+		cl: &fasthttp.Client{
+			MaxConnsPerHost:               fasthttp.DefaultMaxConnsPerHost * 300,
+			DisableHeaderNamesNormalizing: true,
+		},
 	}
 	h1 := connmgr.NewHost(connmgr.HostTypeHTTP, "http://localhost:9111", "http://localhost:9111")
 	h1.SetTimeout(100 * time.Millisecond)
