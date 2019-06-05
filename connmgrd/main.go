@@ -38,7 +38,7 @@ func main() {
 	}
 	h1 := connmgr.NewHost(connmgr.HostTypeHTTP, "http://localhost:9111", "http://localhost:9111")
 	h1.SetTimeout(100 * time.Millisecond)
-	h2 := connmgr.NewHost(connmgr.HostTypeHTTP, "http://localhost:9111", "http://localhost:9112")
+	h2 := connmgr.NewHost(connmgr.HostTypeHTTP, "http://localhost:9112", "http://localhost:9112")
 	h2.SetTimeout(100 * time.Millisecond)
 	s.httpPool.Add(h1)
 	s.httpPool.Add(h2)
